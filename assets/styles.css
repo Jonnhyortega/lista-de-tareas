@@ -1,0 +1,125 @@
+@import url("https://fonts.googleapis.com/css2?family=Madimi+One&family=Poppins&family=Roboto&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  /* border: 1px solid white; */
+}
+body {
+  background-color: blueviolet;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 0 10rem 0;
+}
+
+h1 {
+  padding: 1rem;
+  font-size: 3rem;
+}
+
+form {
+  padding: 1rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 4fr 3fr 3fr 1fr;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+  border: 2px solid white;
+  border-radius: 3px;
+}
+
+label {
+  font-weight: 700;
+  color: white;
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+#task-input {
+  text-align: center;
+  padding: 0.3rem;
+  border-radius: 2px none;
+  box-shadow: 1px 1px 2px 1px black;
+}
+
+#task-list {
+  background-color: rgba(0, 0, 0, 0.366);
+  width: 100%;
+  margin: 0 auto;
+  padding: 1rem;
+  border: 2px solid white;
+  border-radius: 2px;
+  box-shadow: 1px 1px 5px 2px black;
+}
+
+.task {
+  display: grid;
+  grid-template-columns: 6fr 1fr 1fr;
+  color: white;
+  padding: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.674);
+  gap: 1rem;
+}
+
+#task-description {
+  border: 1px solid white;
+  padding: 0 0 0 1rem;
+  text-align: left;
+}
+
+.task-complete {
+  background-color: grey;
+}
+
+#item-list {
+  gap: 1rem;
+  list-style: none;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  color: black;
+  font-size: 1.4rem;
+  font-weight: 700;
+  padding: 0.5rem;
+}
+
+#add-button {
+  cursor: pointer;
+}
+
+button {
+  border: 1px solid black;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  border-radius: 3px;
+  font-weight: 700;
+  letter-spacing: 0.2rem;
+  text-align: center;
+}
+
+button:hover {
+  background-color: rgb(63, 207, 63);
+}
+
+#delete-all {
+  width: 20%;
+  box-shadow: 1px 1px 5px 1px;
+}
+
+#delete-all:hover {
+  background-color: red;
+  color: white;
+  box-shadow: 1px 1px 5px 1px black;
+}
+
+/*CODIGO PARA JAVASCRIPT  */
+.desapear {
+  display: none;
+}
