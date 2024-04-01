@@ -1,133 +1,123 @@
 // VARIABLES
 const body = document.querySelector("body");
-const taskInput = document.querySelector("#task-input");
+const nameInput = document.querySelector("#task-input");
 const addButton = document.querySelector("#add-button");
+const btnDeleteAll = document.querySelector("#delete-all");
 const taskList = document.querySelector("#task-list");
 const form = document.querySelector("form");
-const btnDeleteAll = document.querySelector("#delete-all");
-// Variable del contenido del storage o array vacio.
 let taskListLocalStorage = JSON.parse(localStorage.getItem("tasks")) || [];
-console.log(taskListLocalStorage);
 
-// SAVE CHANGES IN LOCALSTORAGE
+// FUNCTION TO SAVE CHANGES IN LOCALSTORAGE
 const savedLs = () => {
   localStorage.setItem("tasks", JSON.stringify(taskListLocalStorage));
 };
 
-// REMOVE TASK
+// FUNCTION TO EMPTY INPUT
+const emptyInput = () => {
+  nameInput.value = "";
+};
 
-// RENDER TASKS
-const renderTaskList = () => {
-  console.log(taskListLocalStorage);
-  if (taskListLocalStorage.length) {
-    taskListLocalStorage.map(
-      (object) =>
-        (taskList.innerHTML += `
-      <li class='task' data-id="${object.name}">
-       <p id="task-description">${object.name}</p>
-       <button class="complete-task-button"><i class="fa-solid fa-check"></i></button>
-       <button class="delete-task-button" data-id="${object.name}">
-       <i class="fa-solid fa-trash"></i>
-       </button>
-     </li>
-     `)
-    );
-  } else {
-    taskList.innerHTML = "";
+// FUNCTION TO CREATE TASK
+const createTask = () => {
+  if (nameInput.value.trim() !== "") {
+    let task = {
+      name: nameInput.value.trim(),
+      id: Date.now(),
+    };
+    taskListLocalStorage.push(task);
+    savedLs();
   }
-  console.log(taskList);
-  let liTask = document.querySelectorAll(".task");
-  let delTaskBtn = document.querySelectorAll(".delete-task-button");
-  console.log(delTaskBtn);
-  console.log(liTask);
-  console.log(delTaskBtn[0]);
-  console.log(liTask[1].name);
-  const newLiTask = liTask.filter((li) => {
-    liTask.name != "estudiar";
+};
+
+// FUNCTION TO RENDER TASKS IN THE DOM
+const renderTasks = () => {
+  taskList.innerHTML = "";
+  taskListLocalStorage.forEach((task) => {
+    taskList.innerHTML += `
+      <li class="task" data-id="${task.id}" >
+        <p>${task.name}</p>
+        <button class="delete-task-button" data-id="${task.id}">Borrar</button>
+        <button class="complete-task-button" data-id="${task.name}">Ok</button>
+      </li>
+    `;
   });
-  console.log(newLiTask);
-  // cuando haga click, lo que quiero es que le
-  // agregue al li correspondiente el .deseapear
-  // delTaskBtn.addEventListener("click", (e) => {
-  //   if (e.currentTarget.dataset.id === liTask.dataset.id) {
-  //     liTask.classList.add(".desapear");
-  //   }
-  // });
+
+  // FUNCTIONS TO COMPLETE TASK
+  const completeButtons = document.querySelectorAll(".complete-task-button");
+  completeButtons.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      if (btn.parentNode.classList.contains("complete")) {
+        btn.parentNode.classList.remove("complete");
+      } else {
+        btn.parentNode.classList.add("complete");
+      }
+    });
+  });
+  // FUNCTIONS TO COMPLETE TASK
+
+  //FUNCTIONS TO DELETE TASK
+  const deleteButtons = document.querySelectorAll(".delete-task-button");
+  deleteButtons.forEach((button) => {
+    button.addEventListener("click", handleDeleteTask);
+  });
+};
+
+const handleDeleteTask = (e) => {
+  let taskId = e.currentTarget.dataset.id;
+  console.log(taskId);
+  console.log(e.currentTarget.dataset.id);
+  deleteTask(taskId);
+};
+// FUNCTION TO DELETE TASK
+const deleteTask = (taskId) => {
+  taskListLocalStorage = taskListLocalStorage.filter(
+    (task) => task.id !== parseInt(taskId)
+  );
   savedLs();
-  renderButtonDeleteAll();
+  renderTasks();
+  showDeleteAllButton();
+  console.log(taskListLocalStorage);
 };
+//FUNCTIONS TO DELETE TASK
 
-const selectBtnDel = (array) => {};
-
-//DELETE TASK
-// const removeTask = (e) => {
-//   let newTasklistProvisory = taskListLocalStorage.filter(
-//     (element) => element.dataset.id != e.currentTarget.dataset.id
-//   );
-//   taskListLocalStorage = newTasklistProvisory;
-//   savedLs();
-//   renderTaskList();
-// };
-
-// CORRECT INPUT
-// const correctInput = () => {
-//   taskInput.value.trim().replace(/\s+/g, " ");
-// };
-
-//VALIDACION DE TAREA
-// const isValidTask = (taskName) => {
-//   let isValid = true;
-//   if (!taskName.length) {
-//     alert("Por favor ingrese una tarea");
-//     isValid = false;
-//   } else if (
-//     taskListLocalStorage.some(
-//       (task) => task.name.toLowerCase() === taskName.toLowerCase()
-//     )
-//   ) {
-//     alert("Ya existe esa tarea");
-//     isValid = false;
-//   }
-//   return isValid;
-// };
-
-// RENDER BUTTON DELETE ALL
-
-const renderButtonDeleteAll = () => {
-  if (taskListLocalStorage.length) {
-    btnDeleteAll.disabled = false;
-    btnDeleteAll.style.pointerEvents = "auto";
-  } else {
-    btnDeleteAll.style.pointerEvents = "none";
-    btnDeleteAll.disabled = true;
-  }
-};
-
-//STARTS FUNCTION
-document.addEventListener("DOMContentLoaded", renderTaskList);
-
-// ADD TASK
+// INIT
+// SUBMIT FORM
 form.addEventListener("submit", (e) => {
   e.preventDefault();
-  // CREATE OBJECT TASK FOR SAVE IN TaskListLocalStorage
-  let task = {
-    name: taskInput.value,
-    id: Date.now(),
-  };
-  taskListLocalStorage.push(task);
+  createTask();
+  emptyInput();
+  renderTasks();
+  showDeleteAllButton();
   savedLs();
-  renderTaskList();
-  taskInput.value = "";
 });
 
-// FUNCTIONS FOR DELETE TASKS
-// REMOVE ALL
-const removeAll = (e) => {
-  taskListLocalStorage = [];
-  savedLs();
-  renderTaskList();
-  renderButtonDeleteAll();
+// RENDER DOM
+document.addEventListener("DOMContentLoaded", () => {
+  renderTasks();
+  showDeleteAllButton();
+});
+
+// DELETE ALL TASKS
+
+// FUNCTION TO SHOW DELETE-ALL BUTTON
+const showDeleteAllButton = () => {
+  if (taskListLocalStorage.length > 0) {
+    btnDeleteAll.removeAttribute("disabled");
+  } else {
+    btnDeleteAll.setAttribute("disabled", "disabled");
+  }
 };
 
-// REMOVE ALL TASKS FROM DOM ONLY
-btnDeleteAll.addEventListener("click", removeAll);
+btnDeleteAll.addEventListener("click", (e) => {
+  let respuestaUsuario = window.confirm(
+    "¿Estás seguro que deseas eliminar todas las tareas?"
+  );
+  if (respuestaUsuario) {
+    taskListLocalStorage = [];
+    savedLs();
+    renderTasks();
+    showDeleteAllButton();
+  } else {
+    alert("Ok, no toques mas entonces.");
+  }
+});
