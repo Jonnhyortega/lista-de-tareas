@@ -35,11 +35,35 @@ const renderTasks = () => {
   taskListLocalStorage.forEach((task) => {
     taskList.innerHTML += `
       <li class="task" data-id="${task.id}" >
-        <p>${task.name}</p>
-        <button class="delete-task-button" data-id="${task.id}">Borrar</button>
-        <button class="complete-task-button" data-id="${task.name}">Ok</button>
+            <p id="taskName" class = "taskName">${task.name}</p>
+            <button class="edit-task-button btnTask" data-id="${task.id}"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button class="delete-task-button btnTask" data-id="${task.id}"><i class="fa-solid fa-delete-left"></i></button>
+            <button class="complete-task-button btnTask" data-id="${task.id}"><i class="fa-solid fa-circle-check"></i></button>
       </li>
     `;
+    
+  });
+
+  //FUNCTION TO
+
+  //FUNCTION TO EDIT TASK
+  document.querySelectorAll(".edit-task-button").forEach((b) => {
+    b.addEventListener("click", (e) => {
+      let btnTaskId = e.currentTarget.dataset.id;
+      console.log(btnTaskId);
+      console.log(taskListLocalStorage);
+      const task = taskListLocalStorage.find((task) => task.id == btnTaskId);
+      if (task) {
+        const edit = window.prompt("Ingrese correccion", task.name);
+        if (edit) {
+          task.name = edit;
+          savedLs();
+          renderTasks();
+        } else {
+          return;
+        }
+      }
+    });
   });
 
   // FUNCTIONS TO COMPLETE TASK
@@ -53,7 +77,18 @@ const renderTasks = () => {
       }
     });
   });
-  // FUNCTIONS TO COMPLETE TASK
+
+  // completeButtons.forEach(btn=>{
+  //   btn.addEventListener("click", (e) => {
+  //     let taskId = e.currentTarget.dataset.id
+  //     let taskFound = taskListLocalStorage.find(t=>t.id== taskId)
+  //     if(taskFound){
+  //       taskFound.complete = true
+  //     }
+  //   })
+  // })
+
+  
 
   //FUNCTIONS TO DELETE TASK
   const deleteButtons = document.querySelectorAll(".delete-task-button");
@@ -62,13 +97,13 @@ const renderTasks = () => {
   });
 };
 
+
+// FUNCTION TO DELETE TASK
 const handleDeleteTask = (e) => {
   let taskId = e.currentTarget.dataset.id;
-  console.log(taskId);
-  console.log(e.currentTarget.dataset.id);
   deleteTask(taskId);
 };
-// FUNCTION TO DELETE TASK
+
 const deleteTask = (taskId) => {
   taskListLocalStorage = taskListLocalStorage.filter(
     (task) => task.id !== parseInt(taskId)
@@ -79,6 +114,8 @@ const deleteTask = (taskId) => {
   console.log(taskListLocalStorage);
 };
 //FUNCTIONS TO DELETE TASK
+
+
 
 // INIT
 // SUBMIT FORM
@@ -103,8 +140,10 @@ document.addEventListener("DOMContentLoaded", () => {
 const showDeleteAllButton = () => {
   if (taskListLocalStorage.length > 0) {
     btnDeleteAll.removeAttribute("disabled");
+    btnDeleteAll.style.display = "block"
   } else {
     btnDeleteAll.setAttribute("disabled", "disabled");
+    btnDeleteAll.style.display = "none"
   }
 };
 
@@ -118,6 +157,6 @@ btnDeleteAll.addEventListener("click", (e) => {
     renderTasks();
     showDeleteAllButton();
   } else {
-    alert("Ok, no toques mas entonces.");
+    alert("Mas cuidado la proxima");
   }
 });
