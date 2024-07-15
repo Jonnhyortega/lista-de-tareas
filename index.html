@@ -21,11 +21,23 @@
       <input type="submit" value="Agregar" id="add-button"></input>
     </form>
     
-    <h2q>Lista de Tareas</h2q>
+    <h2>Lista de Tareas</h2>
     <ul id="task-list">
       
     </ul>
-    <button id="delete-all" disabled><i class="fa-solid fa-trash"></i></button>
+    <button id="delete-all"><i class="fa-solid fa-trash"></i></button>
+    <!-- Modal Structure -->
+    <div id="delete-modal" class="modal">
+      <div class="modal-content">
+        <h4>Confirmar Eliminación</h4>
+        <p>¿Estás seguro que deseas eliminar todas las tareas?</p>
+        <div class="modal-buttons">
+          <button id="confirm-delete-all" class="btn">Sí</button>
+          <button id="cancel-delete-all" class="btn">No</button>
+        </div>
+      </div>
+    </div>
+
     <footer>
         by Jonathan Ortega®
     </footer>

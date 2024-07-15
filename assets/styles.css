@@ -91,10 +91,6 @@ color: white;
 box-shadow: 1px 1px 2px black;
 }
 
-#add-button {
-  cursor: pointer;
-  width: 30%;
-}
 
 #add-button {
   border: 1px solid black;
@@ -104,13 +100,19 @@ box-shadow: 1px 1px 2px black;
   font-weight: 700;
   letter-spacing: 0.2rem;
   text-align: center;
+
+  cursor: pointer;
+  width: 30%;
 }
 
 #add-button:hover {
-  background-color: var(--secondaryColor);
+  background-color: grey;
+  border: 1px solid white;
+  color: white;;
 }
 
 #delete-all {
+  display: none;
   cursor: pointer;
   width: 20%;
   box-shadow: 1px 1px 5px 1px;
@@ -137,8 +139,51 @@ footer {
 }
 
 .complete {
-  background-color: var(--secondaryColor);
-  border: 1px solid white;
+  background-color: gold;
+  color: black;
+}
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(5px); 
+}
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 10px;
+  box-shadow: 1px 1px 15px 5px black;
+
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 2em;
+}
+
+.modal .btn {
+  padding: 10px 20px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+}
+
+.modal .btn:hover {
+  background-color: #0056b3;
 }
 
 
