@@ -1,4 +1,3 @@
-// VARIABLES
 const body = document.querySelector("body");
 const nameInput = document.querySelector("#task-input");
 const addButton = document.querySelector("#add-button");
@@ -9,18 +8,17 @@ const deleteModal = document.getElementById("delete-modal");
 const confirmDeleteAll = document.getElementById("confirm-delete-all");
 const cancelDeleteAll = document.getElementById("cancel-delete-all");
 
-let taskListLocalStorage = JSON.parse(localStorage.getItem("tasks")) || [];
-
+let taskListLocalStorage = JSON.parse(localStorage.getItem("TASKS")) || [];
+// let taskListsGroup = JSON.parse(localStorage.getItem("GROUPS_TASKS") || []);
 // FUNCTION TO SAVE CHANGES IN LOCALSTORAGE
 const savedLs = () => {
-  localStorage.setItem("tasks", JSON.stringify(taskListLocalStorage));
+  localStorage.setItem("TASKS", JSON.stringify(taskListLocalStorage));
 };
 
 // FUNCTION TO EMPTY INPUT
 const emptyInput = () => {
   nameInput.value = "";
 };
-
 // FUNCTION TO CREATE TASK
 const createTask = () => {
   if (nameInput.value.trim() !== "") {
@@ -33,29 +31,31 @@ const createTask = () => {
     savedLs();
   }
 };
-
 // TEMPLATE string card
 function template(obj) {
   return `
-  <li class="task ${obj.complete ? 'complete' : ''}" data-id="${obj.id}">
+  <li class="task ${obj.complete ? "complete" : ""}" data-id="${obj.id}">
     <p id="taskName" class="taskName">${obj.name}</p>
-    <button class="edit-task-button btnTask" data-id="${obj.id}"><i class="fa-solid fa-pen-to-square"></i></button>
-    <button class="delete-task-button btnTask" data-id="${obj.id}"><i class="fa-solid fa-delete-left"></i></button>
-    <button class="complete-task-button btnTask" data-id="${obj.id}"><i class="fa-solid fa-circle-check"></i></button>
+    <button class="edit-task-button btnTask" data-id="${
+      obj.id
+    }"><i class="fa-solid fa-pen-to-square"></i></button>
+    <button class="delete-task-button btnTask" data-id="${
+      obj.id
+    }"><i class="fa-solid fa-delete-left"></i></button>
+    <button class="complete-task-button btnTask" data-id="${
+      obj.id
+    }"><i class="fa-solid fa-circle-check"></i></button>
   </li>
   `;
 }
-
 // FUNCTION TO RENDER TASKS IN THE DOM
 const renderTasks = () => {
   taskList.innerHTML = "";
   taskListLocalStorage.forEach((task) => {
     taskList.innerHTML += template(task);
   });
-
   // FUNCTION TO SHOW DELETE-ALL BUTTON
-  showDeleteAllButton(); // Moved to here to ensure it is called after rendering tasks
-
+  showDeleteAllButton();
   //FUNCTION TO EDIT TASK
   document.querySelectorAll(".edit-task-button").forEach((b) => {
     b.addEventListener("click", (e) => {
@@ -71,7 +71,6 @@ const renderTasks = () => {
       }
     });
   });
-
   // FUNCTIONS TO COMPLETE TASK
   const completeButtons = document.querySelectorAll(".complete-task-button");
   completeButtons.forEach((btn) => {
@@ -85,28 +84,44 @@ const renderTasks = () => {
       }
     });
   });
-
   // FUNCTIONS TO DELETE TASK
   const deleteButtons = document.querySelectorAll(".delete-task-button");
   deleteButtons.forEach((button) => {
-    button.addEventListener("click", handleDeleteTask);
+    button.addEventListener("click", (e) => {
+      const taskId = e.currentTarget.dataset.id;
+      document.querySelector(".modal-content-taskDelete").style.display =
+        "block";
+
+      const confirmButton = document.querySelector("#confirm");
+      const cancelButton = document.querySelector("#cancel");
+
+      confirmButton.onclick = () => {
+        deleteTask(taskId);
+        document.querySelector(".modal-content-taskDelete").style.display =
+          "none";
+      };
+
+      // Event to cancel
+      cancelButton.onclick = () => {
+        document.querySelector(".modal-content-taskDelete").style.display =
+          "none";
+      };
+    });
   });
 };
-
 const handleDeleteTask = (e) => {
   let taskId = e.currentTarget.dataset.id;
   deleteTask(taskId);
 };
-
 const deleteTask = (taskId) => {
   taskListLocalStorage = taskListLocalStorage.filter(
     (task) => task.id !== parseInt(taskId)
   );
+
   savedLs();
   renderTasks();
-  showDeleteAllButton(); // Ensure to show/hide the delete-all button after deleting a task
+  showDeleteAllButton();
 };
-
 const showDeleteAllButton = () => {
   if (taskListLocalStorage.length > 0) {
     btnDeleteAll.style.display = "block";
@@ -114,10 +129,9 @@ const showDeleteAllButton = () => {
     btnDeleteAll.style.display = "none";
   }
 };
-
 // DELETE ALL TASKS
 btnDeleteAll.addEventListener("click", (e) => {
-  deleteModal.style.display = "block"; // Show the modal
+  deleteModal.style.display = "block";
 });
 
 // Confirm delete all tasks
@@ -126,12 +140,12 @@ confirmDeleteAll.addEventListener("click", () => {
   savedLs();
   renderTasks();
   showDeleteAllButton();
-  deleteModal.style.display = "none"; // Hide the modal
+  deleteModal.style.display = "none";
 });
 
 // Cancel delete all tasks
 cancelDeleteAll.addEventListener("click", () => {
-  deleteModal.style.display = "none"; // Hide the modal
+  deleteModal.style.display = "none";
 });
 
 // INIT
@@ -142,7 +156,7 @@ form.addEventListener("submit", (e) => {
   emptyInput();
   renderTasks();
   savedLs();
-  showDeleteAllButton(); // Ensure to show/hide the delete-all button after adding a task
+  showDeleteAllButton();
 });
 
 // RENDER DOM
